@@ -1,0 +1,14 @@
+<% layout('/layouts/boilerplate') %>
+<link rel="stylesheet" href="/stylesheets/edit.css">
+
+<div class="text-center">
+    <form action="/posts/<%= post._id %>?_method=PATCH" method="POST">
+        <h1 class="bold">Edit a Post</h1>
+        <div class="d-flex align-items-center justify-content-center mt-4">
+            <label class="bold pe-2" for="bio">Caption</label>
+            <textarea class="form-control" type="text" id="caption" name="post[caption]"><%= post.caption %></textarea>
+        </div>
+
+        <button class="btn btn-primary mt-4">Submit</button>
+    </form>
+</div>

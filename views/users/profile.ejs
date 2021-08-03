@@ -1,0 +1,22 @@
+<%- layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/profile.css">
+
+<section class="container mt-2">
+    <div class="row d-flex align-items-center">
+        <div class="col-5 d-flex justify-content-center">
+            <% if(!currentUser.profilePhoto){ %>
+            <a class="pfp offset-3" href="/profile/editPhoto"><img class="pfp"
+                    src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt=""></a>
+            <% } else { %>
+            <a class="pfp offset-3" href="/profile/editPhoto"><img class="pfp" src="<%= currentUser.profilePhoto.url %>"
+                    alt=""></a>
+            <% } %>
+        </div>
+        <div class="col-7">
+            <h1><%= currentUser.username %> <span><a class="btn" href="/profile/editBio">Edit Bio</a></span></h1>
+            <div class="bio">
+                <%= currentUser.bio %>
+            </div>
+        </div>
+    </div>
+</section>

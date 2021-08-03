@@ -1,0 +1,25 @@
+nav{
+    background-color: #f8f9fa;
+}
+
+.navbar-brand{
+    font-family: 'Style Script', cursive;
+    font-size: 1.8rem;
+}
+
+.icons{
+    color: black;
+    font-size: 2rem;
+}
+
+.container-fluid{
+    margin: auto 15%;
+}
+
+.navbarPfp{
+    object-fit: cover;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+}
+

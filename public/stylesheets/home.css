@@ -1,0 +1,12 @@
+.actions{
+    text-decoration: none;
+}
+
+.red{
+    color: red;
+    font-size: 2rem;
+}
+
+.postComment{
+    border-top: 0.1rem solid #e9ecef; 
+}

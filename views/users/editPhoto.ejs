@@ -1,0 +1,25 @@
+<%- layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/editPhoto.css">
+
+<div class="text-center d-flex justify-content-center">
+    <form action="/profile/editPhoto?_method=PATCH" method="POST" enctype="multipart/form-data">
+        <h1 class="bold">Edit Profile Picture</h1>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <div class="drop-zone">
+                    <p class="drop-zone__prompt"><i class="far fa-image imgFile"></i><br>Drop file here or click to
+                        upload
+                    </p>
+                    <input type="file" name="profilePhoto" class="drop-zone__input form-control" required>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary">Next</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/javascripts/new.js"></script>

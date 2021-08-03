@@ -1,0 +1,16 @@
+.pfp{
+    object-fit: cover;
+    border-radius: 50%;
+    width: 11rem;
+    height: 11rem;
+}
+
+.btn{
+    background-color: transparent;
+    border: thin solid #ced4da;
+}
+
+.btn:hover{
+    transition: background-color 0.2s ease-in-out;
+    background-color: #ced4da;
+}
