@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { cloudinary } = require('../cloudinary')
+const { cloudinary } = require('../cloudinary');
+const Image = require("./image");
+const Comment = require("./comment");
 
 const opts = { toJSON: { virtuals: true } };
 
@@ -34,7 +36,14 @@ const PostSchema = new Schema({
 PostSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         // delete images
-        await cloudinary.uploader.destroy(doc.image.filename);
+        const image = await Image.findById(doc.image);
+        await cloudinary.uploader.destroy(image.filename);
+        await Image.deleteOne({ _id: doc.image })
+        await Comment.deleteMany({
+            _id: {
+                $in: doc.comments
+            }
+        })
     }
 });
 

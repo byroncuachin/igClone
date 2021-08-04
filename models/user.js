@@ -16,4 +16,16 @@ const UserSchema = new Schema({
 });
 UserSchema.plugin(passportLocalMongoose);
 
+// UserSchema.post('findOneAndUpdate', async function (doc) {
+//     if (doc) {
+//         console.log(doc);
+//         // delete images
+//         const image = await Image.findById(doc.image);
+//         if (doc.image) {
+//             await cloudinary.uploader.destroy(image.filename);
+//             await Image.deleteOne({ _id: doc.image })
+//         }
+//     }
+// });
+
 module.exports = mongoose.model('User', UserSchema);
