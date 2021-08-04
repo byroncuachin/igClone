@@ -33,7 +33,7 @@ module.exports.isUser = async (req, res, next) => {
     next();
 }
 
-module.exports.isReviewUser = async (req, res, next) => {
+module.exports.isCommentUser = async (req, res, next) => {
     const { commentId, id } = req.params;
     const comment = await Comment.findById(commentId);
     const post = await Post.findById(id);

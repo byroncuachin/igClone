@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const Post = require("../models/post");

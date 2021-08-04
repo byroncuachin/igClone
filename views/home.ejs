@@ -8,7 +8,14 @@
         <div class="card py-2 mb-4" style="width: 25rem;">
             <div class="card-body">
                 <div class="d-inline-flex w-100 align-items-center">
-                    <h5 class="card-title m-0 bold"><%= post.user.username %> </h5>
+                    <p class="card-title m-0 bold">
+                        <% if(post.user.profilePhoto){ %>
+                        <img class="navbarPfp" src="<%= post.user.profilePhoto.url %>" alt=""> <%= post.user.username %>
+                        <% } else { %>
+                        <img class="navbarPfp" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                            alt=""> <%= post.user.username %>
+                        <% } %>
+                    </p>
                     <% if(currentUser && post.user.equals(currentUser._id)){ %>
                     <div class="ms-auto">
                         <!-- Delete and Edit Post Buttons -->

@@ -7,7 +7,6 @@ const methodOverride = require("method-override");
 const ExpressError = require('./utils/expressError')
 const catchAsync = require('./utils/catchAsync');
 const path = require("path");
-const multer = require('multer')
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -17,13 +16,11 @@ const User = require("./models/user");
 const Comment = require("./models/comment");
 const Image = require("./models/image");
 const postsRoutes = require("./routes/posts");
-const { cloudinary } = require('./cloudinary');
+const commentRoutes = require("./routes/comment");
+const profileRoutes = require("./routes/profile");
 const { isLoggedIn, validatePost, isUser, isReviewUser, validateComment } = require("./middleware")
 
 const MongoStore = require('connect-mongo');
-
-const { storage } = require("./cloudinary");
-const upload = multer({ storage });
 
 const app = express();
 
@@ -94,17 +91,25 @@ app.use(async (req, res, next) => {
     next();
 });
 
-// routes for posts
+// routes
 app.use("/posts", postsRoutes);
+app.use("/posts/:id/comment", commentRoutes);
+app.use("/profile", profileRoutes);
 
 // home page with posts
 app.get("/", catchAsync(async (req, res) => {
+    // getting all posts while populating different schemas
     const posts = await Post.find({}).populate({
         path: "comments",
         populate: {
             path: "user",
         },
-    }).populate("image").populate("user");
+    }).populate("image").populate({
+        path: "user",
+        populate: {
+            path: "profilePhoto"
+        }
+    });
     res.render("home", { posts });
 }));
 
@@ -120,28 +125,6 @@ app.post("/", isLoggedIn, validatePost, async (req, res) => {
     await post.save();
     res.redirect("/");
 })
-
-// creating a comment
-app.post("/posts/:id/comment", isLoggedIn, validateComment, catchAsync(async (req, res) => {
-    const id = req.params.id;
-    const post = await Post.findById(id);
-    const comment = new Comment(req.body.comment);
-    comment.user = req.user._id;
-    post.comments.push(comment);
-    await comment.save();
-    await post.save();
-    req.flash('success', 'Created new comment!')
-    res.redirect("/");
-}));
-
-// deleting a comment
-app.delete("/posts/:id/comment/:commentId", isLoggedIn, isReviewUser, catchAsync(async (req, res) => {
-    const { id, commentId } = req.params;
-    await Post.findByIdAndUpdate(id, { $pull: { comments: commentId } });
-    await Comment.findByIdAndDelete(commentId);
-    req.flash('success', 'Successfully deleted review');
-    res.redirect("/");
-}));
 
 // rendering register form
 app.get("/register", (req, res) => {
@@ -188,42 +171,6 @@ app.get("/logout", (req, res) => {
     req.flash('success', "Goodbye!");
     res.redirect('/');
 });
-
-// render profile page
-app.get("/profile", async (req, res) => {
-    res.render("users/profile");
-})
-
-// render edit bio page
-app.get("/profile/editBio", (req, res) => {
-    res.render("users/editBio");
-})
-
-// edit bio
-app.patch("/profile/editBio", async (req, res) => {
-    const user = await User.findByIdAndUpdate(req.user._id, { bio: req.body.user.bio }, { runValidators: true, new: true });
-    await user.save();
-    res.redirect("/profile")
-})
-
-// render edit profile photo page
-app.get("/profile/editPhoto", (req, res) => {
-    res.render("users/editPhoto");
-});
-
-// changing profile picture
-app.patch("/profile/editPhoto", upload.single("profilePhoto"), async (req, res) => {
-    if (req.user.profilePhoto) {
-        const oldPfp = await Image.findById(req.user.profilePhoto);
-        console.log(oldPfp);
-        await cloudinary.uploader.destroy(oldPfp.filename);
-    }
-    const pfp = new Image({ url: req.file.path, filename: req.file.filename });
-    const user = await User.findByIdAndUpdate(req.user._id, { profilePhoto: pfp }, { runValidators: true, new: true });
-    await user.save();
-    await pfp.save();
-    res.redirect("/profile");
-})
 
 // error page
 app.all('*', (req, res, next) => {
