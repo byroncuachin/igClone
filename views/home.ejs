@@ -10,11 +10,12 @@
                 <div class="d-inline-flex w-100 align-items-center">
                     <p class="card-title m-0 bold">
                         <% if(post.user.profilePhoto){ %>
-                        <img class="navbarPfp" src="<%= post.user.profilePhoto.url %>" alt=""> <%= post.user.username %>
+                        <img class="navbarPfp" src="<%= post.user.profilePhoto.url %>" alt="">
                         <% } else { %>
                         <img class="navbarPfp" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
-                            alt=""> <%= post.user.username %>
+                            alt="">
                         <% } %>
+                        <a href="/profile/<%= post.user.username %>" class="username"><%= post.user.username %></a>
                     </p>
                     <% if(currentUser && post.user.equals(currentUser._id)){ %>
                     <div class="ms-auto">
@@ -47,11 +48,15 @@
             </div>
             <div class="card-body pt-1 pb-0">
                 <div><%= post.likes.amount %> likes</div>
-                <p class="card-text"><span class="bold"><%= post.user.username %></span> <%= post.caption %></p>
+                <p class="card-text"><a href="/profile/<%= post.user.username %>" class="username"><span
+                            class="bold"><%= post.user.username %></span></a> <%= post.caption %></p>
                 <!-- Comments -->
                 <% for(comment of post.comments){ %>
                 <div class="pb-2 d-inline-flex w-100 align-items-center">
-                    <span class="bold pe-1"><%= comment.user.username %></span> <%= comment.body %>
+                    <a href="/profile/<%= comment.user.username %>" class="username">
+                        <span class="bold pe-1"><%= comment.user.username %></span>
+                    </a>
+                    <%= comment.body %>
                     <!-- Deleting comment -->
                     <% if((currentUser && comment.user.equals(currentUser._id)) || (currentUser && post.user.equals(currentUser._id))){ %>
                     <!-- Only comment or post owner can delete a comment -->

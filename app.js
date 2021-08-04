@@ -94,7 +94,7 @@ app.use(async (req, res, next) => {
 // routes
 app.use("/posts", postsRoutes);
 app.use("/posts/:id/comment", commentRoutes);
-app.use("/profile", profileRoutes);
+app.use("/profile/:name", profileRoutes);
 
 // home page with posts
 app.get("/", catchAsync(async (req, res) => {

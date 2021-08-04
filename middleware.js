@@ -55,3 +55,13 @@ module.exports.validateComment = (req, res, next) => {
         next();
     }
 }
+
+module.exports.isProfileUser = async (req, res, next) => {
+    const { name } = req.params;
+    const user = await User.findOne({ username: name });
+    if (!user.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect("/");
+    }
+    next();
+}

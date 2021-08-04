@@ -1,3 +1,13 @@
+.username{
+    text-decoration: none;
+    color: black;
+}
+
+.username:hover{
+    text-decoration: underline black;
+    color: black;
+}
+
 .actions{
     text-decoration: none;
 }

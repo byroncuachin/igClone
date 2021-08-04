@@ -2,7 +2,8 @@
 <link rel="stylesheet" href="/stylesheets/editPhoto.css">
 
 <div class="text-center d-flex justify-content-center">
-    <form action="/profile/editPhoto?_method=PATCH" method="POST" enctype="multipart/form-data">
+    <form action="/profile/<%= currentUser.username %>/editPhoto?_method=PATCH" method="POST"
+        enctype="multipart/form-data">
         <h1 class="bold">Edit Profile Picture</h1>
 
         <div class="card mt-4">

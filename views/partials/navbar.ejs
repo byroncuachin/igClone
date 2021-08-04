@@ -33,7 +33,7 @@
                         <li><a class="dropdown-item" href="/login">Log In</a></li>
                         <li><a class="dropdown-item" href="/register">Register</a></li>
                         <% } else { %>
-                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/profile/<%= currentUser.username %>">Profile</a></li>
                         <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         <% } %>
                     </ul>

@@ -1,21 +1,36 @@
 <%- layout("/layouts/boilerplate") %>
 <link rel="stylesheet" href="/stylesheets/profile.css">
-
 <section class="container mt-2">
     <div class="row d-flex align-items-center">
         <div class="col-5 d-flex justify-content-center">
-            <% if(!currentUser.profilePhoto){ %>
-            <a class="pfp offset-3" href="/profile/editPhoto"><img class="pfp"
-                    src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt=""></a>
-            <% } else { %>
-            <a class="pfp offset-3" href="/profile/editPhoto"><img class="pfp" src="<%= currentUser.profilePhoto.url %>"
-                    alt=""></a>
-            <% } %>
+            <div class="offset-4">
+                <% if(!user.profilePhoto){ %>
+                <!-- Show default pfp if user has not changed pfp -->
+                <% if(currentUser && user.equals(currentUser._id)){ %>
+                <!-- Only show edit pfp page if current user is on his/her profile -->
+                <a class="pfp" href="/profile/<%= user.username %>/editPhoto">
+                    <% } %>
+                    <img class="pfp" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                        alt=""></a>
+                <% } else { %>
+                <!-- Show pfp of user if user has changed pfp -->
+                <% if(currentUser && user.equals(currentUser._id)){ %>
+                <!-- Only show edit pfp page if current user is on his/her profile -->
+                <a class="pfp" href="/profile/<%= user.username %>/editPhoto">
+                    <% } %>
+                    <img class="pfp" src="<%= user.profilePhoto.url %>" alt=""></a>
+                <% } %>
+            </div>
         </div>
         <div class="col-7">
-            <h1><%= currentUser.username %> <span><a class="btn" href="/profile/editBio">Edit Bio</a></span></h1>
+            <h1><%= user.username %>
+                <% if(currentUser && user.equals(currentUser._id)){ %>
+                <span><a class="btn" href="/profile/<%= user.username %>/editBio">Edit
+                        Bio</a></span>
+                <% } %>
+            </h1>
             <div class="bio">
-                <%= currentUser.bio %>
+                <%= user.bio %>
             </div>
         </div>
     </div>
