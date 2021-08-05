@@ -23,12 +23,37 @@
             </div>
         </div>
         <div class="col-7">
+            <!-- Username and buttons for edit/follow -->
             <h1><%= profile.username %>
                 <% if(currentUser && profile.equals(currentUser._id)){ %>
-                <span><a class="btn" href="/profile/<%= profile.username %>/editBio">Edit
+                <span><a class="btn editBio" href="/profile/<%= profile.username %>/editBio">Edit
                         Bio</a></span>
+                <% } else { %>
+                <form action="/profile/<%= profile.username %>/follow?_method=PATCH" class="d-inline-flex"
+                    method="POST">
+                    <% if(currentUser && profile.followers.users.indexOf(currentUser._id) !== -1){ %>
+                    <span><button class="btn editBio" href=""><i class="fas fa-user-check"></i></button></span>
+                    <% } else { %>
+                    <span><button class="btn btn-primary follow" href="">Follow</button></span>
+                    <% } %>
+                </form>
                 <% } %>
             </h1>
+
+            <!-- numbers and links to posts, followers, and following -->
+            <div class="stats">
+                <p>
+                    <span class="bold"><%= profile.numOfPosts %></span> posts
+                    <a href="/profile/<%= profile.username %>/followers" class="followers">
+                        <span class="bold"><%= profile.followers.amount %></span> followers
+                    </a>
+                    <a href="/profile/<%= profile.username %>/following" class="followers">
+                        <span class="bold"><%= profile.following.amount %></span> following
+                    </a>
+                </p>
+            </div>
+
+            <!-- Bio -->
             <div class="bio">
                 <%= profile.bio %>
             </div>

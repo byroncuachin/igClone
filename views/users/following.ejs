@@ -1,0 +1,31 @@
+<%- layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/listUsers.css">
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <% if(!usersFollowing[0]){ %>
+            <h5 class="card-title">You have no followers yet!</h5>
+            <% } else { %>
+            <h5 class="card-title bold">Followers</h5>
+            <div class="overflow-scroll">
+                <ul class="list-group list-group-flush">
+                    <% for(let userFollowing of usersFollowing){ %>
+                    <li class="list-group-item ps-1">
+                        <% if(!userFollowing.profilePhoto){ %>
+                        <img class="navbarPfp"
+                            src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg">
+                        <% } else { %>
+                        <img src="<%= userFollowing.profilePhoto.url %>" alt="" class="navbarPfp">
+                        <% } %>
+                        <a href="/profile/<%= userFollowing.username %>" class="username">
+                            <span class="bold"><%= userFollowing.username %></span>
+                        </a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>

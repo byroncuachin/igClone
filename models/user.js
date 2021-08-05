@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new Schema({
+    numOfPosts: Number,
     email: {
         type: String,
         required: true,
@@ -13,6 +14,24 @@ const UserSchema = new Schema({
         ref: "Image",
     },
     bio: String,
+    followers: {
+        amount: Number,
+        users: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+    },
+    following: {
+        amount: Number,
+        users: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+    },
 });
 UserSchema.plugin(passportLocalMongoose);
 

@@ -40,14 +40,23 @@
             <div class="card-body pb-1">
                 <form action="/posts/<%= post._id %>/like?_method=PATCH" method="POST">
                     <% if(currentUser && post.likes.users.indexOf(currentUser._id) !== -1){ %>
-                    <button class="btn p-0 actions"><i class="far fa-heart red"></i></button>
+                    <button class="btn p-0 actions"><i class="far fa-heart redLike"></i></button>
                     <% } else { %>
                     <button class="btn p-0 actions"><i class="far fa-heart icons"></i></button>
                     <% } %>
                 </form>
             </div>
             <div class="card-body pt-1 pb-0">
-                <div><%= post.likes.amount %> likes</div>
+                <div>
+                    <!-- Only put anchor tag if post has at least 1 like -->
+                    <% if(post.likes.amount !== 0){ %>
+                    <a href="/posts/<%= post._id %>/like" class="likes">
+                        <% } %>
+                        <%= post.likes.amount %> likes
+                        <% if(post.likes.amount !== 0){ %>
+                    </a>
+                    <% } %>
+                </div>
                 <p class="card-text mb-1"><a href="/profile/<%= post.user.username %>" class="username"><span
                             class="bold"><%= post.user.username %></span></a> <%= post.caption %></p>
                 <!-- Comments -->

@@ -86,5 +86,21 @@ router.patch("/:id/like", isLoggedIn, catchAsync(async (req, res) => {
     res.redirect("/");
 }));
 
+router.get("/:id/like", catchAsync(async (req, res) => {
+    const id = req.params.id;
+    // get posts along with users who liked post
+    const post = await Post.findById(id).populate({
+        path: "likes",
+        populate: {
+            path: "users",
+            populate: {
+                path: "profilePhoto",
+            },
+        },
+    });
+    const usersLiked = post.likes.users;
+    res.render("posts/like", { usersLiked });
+}))
+
 
 module.exports = router;

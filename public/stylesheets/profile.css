@@ -9,14 +9,18 @@
     height: 9.5rem;
 }
 
-.btn{
+.editBio{
     background-color: transparent;
     border: thin solid #ced4da;
 }
 
-.btn:hover{
+.editBio:hover{
     transition: background-color 0.2s ease-in-out;
     background-color: #ced4da;
+}
+
+button.follow{
+    background-color: #0095F6;
 }
 
 .profilePost{
@@ -44,4 +48,9 @@
     position: absolute;
     width: 92%;
     height: 92%;
-  }
+}
+
+a.followers{
+    text-decoration: none;
+    color: black;
+}

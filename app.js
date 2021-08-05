@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -13,14 +15,15 @@ const LocalStrategy = require('passport-local');
 const flash = require('connect-flash');
 const Post = require("./models/post");
 const User = require("./models/user");
-const Comment = require("./models/comment");
 const Image = require("./models/image");
 const postsRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comment");
 const profileRoutes = require("./routes/profile");
-const { isLoggedIn, validatePost, isUser, isReviewUser, validateComment } = require("./middleware")
+const { isLoggedIn, validatePost } = require("./middleware")
 
-const MongoStore = require('connect-mongo');
+const mongoSanitize = require("express-mongo-sanitize");
+const MongoStore = require("connect-mongo");
+const helmet = require("helmet");
 
 const app = express();
 
@@ -31,8 +34,12 @@ app.set("views", path.join(__dirname, "views"));
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(mongoSanitize({
+    replaceWith: "_",
+}));
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/igClone"
 
-mongoose.connect("mongodb://localhost:27017/igClone", {
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useUnifiedTopology: true,
@@ -49,7 +56,7 @@ mongoose.connect("mongodb://localhost:27017/igClone", {
 const secret = process.env.SECRET || 'thisshouldbeabettersecret'
 
 const store = MongoStore.create({
-    mongoUrl: "mongodb://localhost:27017/igClone",
+    mongoUrl: dbURL,
     touchAfter: 24 * 60 * 60,
     crypto: {
         secret: secret,
@@ -72,6 +79,48 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
+
+app.use(helmet());
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://cdn.jsdelivr.net",
+    "https://fontawesome.com/kits/e8b7ec9f33",
+    "https://kit.fontawesome.com/e8b7ec9f33.js",
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+];
+const fontSrcUrls = [
+    "https://fonts.gstatic.com",
+    "https://ka-f.fontawesome.com",
+];
+const connectSrcUrls = [
+    "https://ka-f.fontawesome.com"
+];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/djvw4syzq/",
+                "https://commons.wikimedia.org/",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -117,10 +166,9 @@ app.get("/", catchAsync(async (req, res) => {
 app.post("/", isLoggedIn, validatePost, async (req, res) => {
     const post = new Post(req.body.post);
     const image = new Image(req.session.image);
-    // post.image = image._id;
     post.image = image;
     post.user = req.user._id;
-    post.likes.amount = "0";
+    post.likes.amount = 0;
     await image.save();
     await post.save();
     res.redirect("/");
@@ -143,6 +191,9 @@ app.post("/register", catchAsync(async (req, res) => {
             }
         });
         user.bio = "I should probably update this...";
+        user.followers.amount = 0;
+        user.following.amount = 0;
+        user.numOfPosts = 0;
         user.save();
         req.flash('success', 'Welcome to igClone!');
         res.redirect('/');

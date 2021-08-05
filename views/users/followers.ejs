@@ -1,0 +1,31 @@
+<%- layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/listUsers.css">
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <% if(!followers[0]){ %>
+            <h5 class="card-title">You are not following anyone!</h5>
+            <% } else { %>
+            <h5 class="card-title bold">Followers</h5>
+            <div class="overflow-scroll">
+                <ul class="list-group list-group-flush">
+                    <% for(let follower of followers){ %>
+                    <li class="list-group-item ps-1">
+                        <% if(!follower.profilePhoto){ %>
+                        <img class="navbarPfp"
+                            src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg">
+                        <% } else { %>
+                        <img src="<%= follower.profilePhoto.url %>" alt="" class="navbarPfp">
+                        <% } %>
+                        <a href="/profile/<%= follower.username %>" class="username">
+                            <span class="bold"><%= follower.username %></span>
+                        </a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
