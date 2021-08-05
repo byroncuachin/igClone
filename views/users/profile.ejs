@@ -1,37 +1,50 @@
 <%- layout("/layouts/boilerplate") %>
 <link rel="stylesheet" href="/stylesheets/profile.css">
-<section class="container mt-2">
-    <div class="row d-flex align-items-center">
+<main class="container mt-2 profilePage">
+    <section class="row d-flex align-items-center">
         <div class="col-5 d-flex justify-content-center">
-            <div class="offset-4">
-                <% if(!user.profilePhoto){ %>
+            <div class="">
+                <% if(!profile.profilePhoto){ %>
                 <!-- Show default pfp if user has not changed pfp -->
-                <% if(currentUser && user.equals(currentUser._id)){ %>
+                <% if(currentUser && profile.equals(currentUser._id)){ %>
                 <!-- Only show edit pfp page if current user is on his/her profile -->
-                <a class="pfp" href="/profile/<%= user.username %>/editPhoto">
+                <a class=" pfp" href="/profile/<%= profile.username %>/editPhoto">
                     <% } %>
                     <img class="pfp" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
                         alt=""></a>
                 <% } else { %>
                 <!-- Show pfp of user if user has changed pfp -->
-                <% if(currentUser && user.equals(currentUser._id)){ %>
+                <% if(currentUser && profile.equals(currentUser._id)){ %>
                 <!-- Only show edit pfp page if current user is on his/her profile -->
-                <a class="pfp" href="/profile/<%= user.username %>/editPhoto">
+                <a class="pfp" href="/profile/<%= profile.username %>/editPhoto">
                     <% } %>
-                    <img class="pfp" src="<%= user.profilePhoto.url %>" alt=""></a>
+                    <img class="pfp" src="<%= profile.profilePhoto.url %>" alt=""></a>
                 <% } %>
             </div>
         </div>
         <div class="col-7">
-            <h1><%= user.username %>
-                <% if(currentUser && user.equals(currentUser._id)){ %>
-                <span><a class="btn" href="/profile/<%= user.username %>/editBio">Edit
+            <h1><%= profile.username %>
+                <% if(currentUser && profile.equals(currentUser._id)){ %>
+                <span><a class="btn" href="/profile/<%= profile.username %>/editBio">Edit
                         Bio</a></span>
                 <% } %>
             </h1>
             <div class="bio">
-                <%= user.bio %>
+                <%= profile.bio %>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="row posts">
+        <!-- Posts on profile -->
+        <% for(let post of posts){ %>
+        <div class="square col-4">
+            <a href="/posts/<%= post._id %>" class="thumbnail">
+                <div class="image">
+                    <img src="<%= post.image.url %>" class="img img-responsive full-width" />
+                </div>
+            </a>
+        </div>
+        <% } %>
+    </section>
+</main>

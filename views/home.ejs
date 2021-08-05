@@ -3,7 +3,7 @@
 
 
 <div class="d-flex justify-content-center">
-    <ul>
+    <ul class="ps-0">
         <% for(let post of posts){ %>
         <div class="card py-2 mb-4" style="width: 25rem;">
             <div class="card-body">
@@ -28,7 +28,7 @@
                                 <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
                                     <button class="btn"><span class="red">Delete</span></button>
                                 </form>
-                                <a class="btn" href="/posts/<%= post._id %>">Edit</a>
+                                <a class="btn" href="/posts/<%= post._id %>/edit">Edit</a>
                             </ul>
                         </div>
                     </div>
@@ -48,11 +48,11 @@
             </div>
             <div class="card-body pt-1 pb-0">
                 <div><%= post.likes.amount %> likes</div>
-                <p class="card-text"><a href="/profile/<%= post.user.username %>" class="username"><span
+                <p class="card-text mb-1"><a href="/profile/<%= post.user.username %>" class="username"><span
                             class="bold"><%= post.user.username %></span></a> <%= post.caption %></p>
                 <!-- Comments -->
                 <% for(comment of post.comments){ %>
-                <div class="pb-2 d-inline-flex w-100 align-items-center">
+                <div class="pb-1 d-inline-flex w-100 align-items-center">
                     <a href="/profile/<%= comment.user.username %>" class="username">
                         <span class="bold pe-1"><%= comment.user.username %></span>
                     </a>
@@ -62,7 +62,7 @@
                     <!-- Only comment or post owner can delete a comment -->
                     <div class="ms-auto">
                         <div class="btn-group dropend">
-                            <a type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a type="button" class="btn py-0 my-0" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ellipsis-h"></i>
                             </a>
                             <ul class="dropdown-menu">

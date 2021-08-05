@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');
 const User = require("../models/user");
 const Image = require("../models/image");
+const Post = require("../models/post");
 const multer = require('multer')
 const { cloudinary } = require('../cloudinary');
 const { isLoggedIn, isProfileUser } = require("../middleware");
@@ -13,9 +14,21 @@ const upload = multer({ storage });
 // render profile page
 router.get("/", catchAsync(async (req, res) => {
     const name = req.params.name;
-    const user = await User.findOne({ username: name }).populate("profilePhoto");
-    // console.log(user);
-    res.render("users/profile", { user });
+    const profile = await User.findOne({ username: name }).populate("profilePhoto");
+
+    // getting all posts while populating different schemas
+    const posts = await Post.find({ user: profile }).populate({
+        path: "comments",
+        populate: {
+            path: "user",
+        },
+    }).populate("image").populate({
+        path: "user",
+        populate: {
+            path: "profilePhoto"
+        }
+    });
+    res.render("users/profile", { profile, posts });
 }));
 
 // render edit bio page

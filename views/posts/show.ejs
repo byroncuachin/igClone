@@ -1,0 +1,97 @@
+<%= layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/home.css">
+
+<div class="d-flex justify-content-center">
+    <div class="card py-2 mb-4" style="width: 25rem;">
+        <div class="card-body">
+            <div class="d-inline-flex w-100 align-items-center">
+                <p class="card-title m-0 bold">
+                    <% if(post.user.profilePhoto){ %>
+                    <img class="navbarPfp" src="<%= post.user.profilePhoto.url %>" alt="">
+                    <% } else { %>
+                    <img class="navbarPfp" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                        alt="">
+                    <% } %>
+                    <a href="/profile/<%= post.user.username %>" class="username"><%= post.user.username %></a>
+                </p>
+                <% if(currentUser && post.user.equals(currentUser._id)){ %>
+                <div class="ms-auto">
+                    <!-- Delete and Edit Post Buttons -->
+                    <div class="btn-group dropend">
+                        <a type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                                <button class="btn"><span class="red">Delete</span></button>
+                            </form>
+                            <a class="btn" href="/posts/<%= post._id %>/edit">Edit</a>
+                        </ul>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+        <img src="<%= post.image.url %>" class="card-img-top" alt="...">
+        <!-- Likes -->
+        <div class="card-body pb-1">
+            <form action="/posts/<%= post._id %>/like?_method=PATCH" method="POST">
+                <% if(currentUser && post.likes.users.indexOf(currentUser._id) !== -1){ %>
+                <button class="btn p-0 actions"><i class="far fa-heart red"></i></button>
+                <% } else { %>
+                <button class="btn p-0 actions"><i class="far fa-heart icons"></i></button>
+                <% } %>
+            </form>
+        </div>
+        <div class="card-body pt-1 pb-0">
+            <div><%= post.likes.amount %> likes</div>
+            <p class="card-text mb-1"><a href="/profile/<%= post.user.username %>" class="username"><span
+                        class="bold"><%= post.user.username %></span></a> <%= post.caption %></p>
+            <!-- Comments -->
+            <% for(comment of post.comments){ %>
+            <div class="pb-1 d-inline-flex w-100 align-items-center">
+                <a href="/profile/<%= comment.user.username %>" class="username">
+                    <span class="bold pe-1"><%= comment.user.username %></span>
+                </a>
+                <%= comment.body %>
+                <!-- Deleting comment -->
+                <% if((currentUser && comment.user.equals(currentUser._id)) || (currentUser && post.user.equals(currentUser._id))){ %>
+                <!-- Only comment or post owner can delete a comment -->
+                <div class="ms-auto">
+                    <div class="btn-group dropend">
+                        <a type="button" class="btn py-0 my-0" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <form action="/posts/<%= post._id %>/comment/<%= comment._id %>?_method=DELETE"
+                                method="POST">
+                                <button class="btn"><span class="red">Delete</span></button>
+                            </form>
+                        </ul>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+        </div>
+
+        <!-- Posting a comment -->
+        <div class="card-body pt-2">
+            <form action="/posts/<%= post._id %>/comment" method="POST">
+                <div class="d-inline-flex w-100 postComment pt-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10">
+                                <input class="form-control" type="text" name="comment[body]"
+                                    placeholder="Add a comment">
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-link btn-lg actions p-0">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

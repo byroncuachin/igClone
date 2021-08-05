@@ -20,10 +20,28 @@ router.get("/new/details", (req, res) => {
 })
 
 // rendering edit form
-router.get("/:id", catchAsync(async (req, res) => {
+router.get("/:id/edit", catchAsync(async (req, res) => {
     const id = req.params.id;
     const post = await Post.findById(id);
     res.render("posts/edit", { post });
+}));
+
+// show page for post
+router.get("/:id", catchAsync(async (req, res) => {
+    const id = req.params.id;
+    // getting all posts while populating different schemas
+    const post = await Post.findById(id).populate({
+        path: "comments",
+        populate: {
+            path: "user",
+        },
+    }).populate("image").populate({
+        path: "user",
+        populate: {
+            path: "profilePhoto"
+        }
+    });
+    res.render("posts/show", { post });
 }));
 
 // creating an image

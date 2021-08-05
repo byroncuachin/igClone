@@ -1,8 +1,12 @@
+.profilePage{
+    max-width: 62rem;
+}
+
 .pfp{
     object-fit: cover;
     border-radius: 50%;
-    width: 11rem;
-    height: 11rem;
+    width: 9.5rem;
+    height: 9.5rem;
 }
 
 .btn{
@@ -14,3 +18,30 @@
     transition: background-color 0.2s ease-in-out;
     background-color: #ced4da;
 }
+
+.profilePost{
+    width: 20rem;
+    height: 20rem;
+    object-fit: cover;
+}
+
+.posts{
+    margin-top: 6rem;
+}
+
+.square{
+    position: relative;
+}
+
+.square::after{
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.image img {
+    object-fit: cover;
+    position: absolute;
+    width: 92%;
+    height: 92%;
+  }
