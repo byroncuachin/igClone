@@ -115,7 +115,7 @@ app.use(
                 "blob:",
                 "data:",
                 "https://res.cloudinary.com/djvw4syzq/",
-                "https://commons.wikimedia.org/",
+                "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },
