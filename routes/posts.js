@@ -9,18 +9,18 @@ const { storage } = require("../cloudinary");
 const upload = multer({ storage });
 
 // render add image page
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("posts/new");
 })
 
 // render add details for image page
-router.get("/new/details", (req, res) => {
+router.get("/new/details", isLoggedIn, (req, res) => {
     const image = req.session.image;
     res.render("posts/details", { image });
 })
 
 // rendering edit form
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, isUser, catchAsync(async (req, res) => {
     const id = req.params.id;
     const post = await Post.findById(id);
     res.render("posts/edit", { post });
@@ -86,6 +86,7 @@ router.patch("/:id/like", isLoggedIn, catchAsync(async (req, res) => {
     res.redirect("/");
 }));
 
+// show page for users who liked post
 router.get("/:id/like", catchAsync(async (req, res) => {
     const id = req.params.id;
     // get posts along with users who liked post
