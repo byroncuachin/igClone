@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
+// require('dotenv').config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -37,7 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize({
     replaceWith: "_",
 }));
-const dbURL = process.env.DB_URL || "mongodb://localhost:27017/igClone"
+// const dbURL = process.env.DB_URL || "mongodb://localhost:27017/igClone"
+const dbURL = "mongodb://localhost:27017/igClone";
 
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
@@ -173,6 +175,23 @@ app.post("/", isLoggedIn, validatePost, async (req, res) => {
     await post.save();
     res.redirect("/");
 })
+
+// searching for a user
+app.post("/search", async (req, res) => {
+    const { username } = req.body.user;
+    // const users = await User.find({ username: { $regex: /^username/ } })
+    // console.log(users);
+    res.redirect(`/search/?username=${username}`);
+});
+
+// render search users page
+app.get("/search", async (req, res) => {
+    const { username } = req.query;
+    const pattern = `^${username}`;
+    const users = await User.find({ username: { $regex: pattern } }).populate("profilePhoto");
+    res.render("./search", { users });
+});
+
 
 // rendering register form
 app.get("/register", (req, res) => {

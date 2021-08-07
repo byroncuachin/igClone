@@ -1,0 +1,31 @@
+<%- layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/stylesheets/listUsers.css">
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <% if(!users[0]){ %>
+            <h5 class="card-title">We could not find anyone with that name...</h5>
+            <% } else { %>
+            <h5 class="card-title bold">Users</h5>
+            <div class="overflow-scroll">
+                <ul class="list-group list-group-flush">
+                    <% for(let user of users){ %>
+                    <li class="list-group-item ps-1">
+                        <% if(!user.profilePhoto){ %>
+                        <img class="navbarPfp"
+                            src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg">
+                        <% } else { %>
+                        <img src="<%= user.profilePhoto.url %>" alt="" class="navbarPfp">
+                        <% } %>
+                        <a href="/profile/<%= user.username %>" class="username">
+                            <span class="bold"><%= user.username %></span>
+                        </a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
