@@ -38,8 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize({
     replaceWith: "_",
 }));
-// const dbURL = process.env.DB_URL || "mongodb://localhost:27017/igClone"
-const dbURL = "mongodb://localhost:27017/igClone";
+
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/igClone"
 
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
