@@ -190,7 +190,6 @@ app.get("/search", async (req, res) => {
     res.render("./search", { users });
 });
 
-
 // rendering register form
 app.get("/register", (req, res) => {
     res.render('./users/register');
