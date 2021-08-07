@@ -179,8 +179,6 @@ app.post("/", isLoggedIn, validatePost, async (req, res) => {
 // searching for a user
 app.post("/search", async (req, res) => {
     const { username } = req.body.user;
-    // const users = await User.find({ username: { $regex: /^username/ } })
-    // console.log(users);
     res.redirect(`/search/?username=${username}`);
 });
 

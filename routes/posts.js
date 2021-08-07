@@ -46,7 +46,6 @@ router.get("/:id", catchAsync(async (req, res) => {
 
 // creating an image
 router.post("/", upload.single("image"), isLoggedIn, (req, res) => {
-    // console.log(req.file);
     req.session.image = { url: req.file.path, filename: req.file.filename };
     res.redirect("/posts/new/details");
 });
